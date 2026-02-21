@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaGo Travel Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Garamond', 'Georgia', serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7b4397 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .brand-name {
+            font-size: 1.2em;
+            letter-spacing: 4px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .planner-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #1e3c72;
+            font-size: 2em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #ff6b9d;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon {
+            font-size: 1.2em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            color: #1e3c72;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            letter-spacing: 0.5px;
+        }
+
+        input, select, textarea {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checklist-section {
+            background: linear-gradient(135deg, #f8f9ff 0%, #fff5f9 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .checklist-title {
+            color: #1e3c72;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .checklist-subtitle {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checklist-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #1e3c72;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .checklist-item label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .budget-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .budget-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .budget-card h3 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+
+        .budget-card .amount {
+            font-size: 2em;
+            font-weight: 300;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .cta-section h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .cta-section p {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            background: white;
+            color: #ff6b9d;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .consultation-btn {
+            background: #1e3c72;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .consultation-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto 0;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .support-text {
+            margin-top: 20px;
+            font-size: 1.05em;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .planner-card {
+                padding: 30px 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .checklist-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="brand-name">FROM INSTAGO ED TRAVEL</div>
+            <h1>✈️ Your Complete Travel Planning Checklist</h1>
+            <p>Everything you need to organize your journey</p>
+        </div>
+
+        <div class="planner-card">
+            <h2 class="section-title">
+                <span class="icon">🌍</span>
+                Trip Details
+            </h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Destination</label>
+                    <input type="text" id="destination" placeholder="Where dreams take you...">
+                </div>
+                
+                <div class="form-group">
+                    <label>Travel Dates</label>
+                    <input type="text" id="dates" placeholder="e.g., Dec 15-22, 2024">
+                </div>
+                
+                <div class="form-group">
+                    <label>Number of Travelers</label>
+                    <input type="number" id="travelers" min="1" placeholder="1">
+                </div>
+                
+                <div class="form-group">
+                    <label>Travel Style</label>
+                    <select id="travelStyle">
+                        <option value="">Select...</option>
+                        <option value="luxury">Luxury & Indulgence</option>
+                        <option value="adventure">Adventure & Exploration</option>
+                        <option value="cultural">Cultural Immersion</option>
+                        <option value="relaxation">Rest & Rejuvenation</option>
+                        <option value="family">Family Experience</option>
+                        <option value="romantic">Romantic Escape</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Special Requests & Preferences</label>
+                <textarea id="preferences" placeholder="Dietary requirements, accessibility needs, celebration occasions, must-see experiences..."></textarea>
+            </div>
+        </div>
+
+        <div class="planner-card">
+            <h2 class="section-title">
+                <span class="icon">💰</span>
+                Budget Planning
+            </h2>
+
+            <div class="budget-section">
+                <div class="budget-card">
+                    <h3>Flights</h3>
+                    <div class="amount">$<span id="flightBudget">0</span></div>
+                    <input type="number" id="flightInput" style="margin-top: 10px; width: 100%;" placeholder="Enter amount">
+                </div>
+                
+                <div class="budget-card">
+                    <h3>Accommodation</h3>
+                    <div class="amount">$<span id="accomBudget">0</span></div>
+                    <input type="number" id="accomInput" style="margin-top: 10px; width: 100%;" placeholder="Enter amount">
+                </div>
+                
+                <div class="budget-card">
+                    <h3>Visa Fees</h3>
+                    <div class="amount">$<span id="visaBudget">0</span></div>
+                    <input type="number" id="visaInput" style="margin-top: 10px; width: 100%;" placeholder="Enter amount">
+                </div>
+                
+                <div class="budget-card">
+                    <h3>Activities</h3>
+                    <div class="amount">$<span id="actBudget">0</span></div>
+                    <input type="number" id="actInput" style="margin-top: 10px; width: 100%;" placeholder="Enter amount">
+                </div>
+            </div>
+
+            <div class="budget-card" style="background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);">
+                <h3>Total Estimated Budget</h3>
+                <div class="amount">$<span id="totalBudget">0</span></div>
+            </div>
+        </div>
+
+        <div class="planner-card">
+            <h2 class="section-title">
+                <span class="icon">✅</span>
+                Your Travel Planning Checklist
+            </h2>
+
+            <div class="checklist-section">
+                <h3 class="checklist-title">1. BEFORE YOU BOOK</h3>
+                <p class="checklist-subtitle">2-3 months out</p>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check1">
+                    <label for="check1">Decide on destination and travel dates</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check2">
+                    <label for="check2">Check passport expiration (needs 6+ months validity)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check3">
+                    <label for="check3">Research visa requirements for destination</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check4">
+                    <label for="check4">Set travel budget (flights, accommodation, visa fees)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check5">
+                    <label for="check5">Consult with InstaGo about visa process</label>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3 class="checklist-title">2. DOCUMENTS YOU'LL NEED</h3>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check6">
+                    <label for="check6">Valid passport</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check7">
+                    <label for="check7">Recent passport photos (2x2 inches)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check8">
+                    <label for="check8">Bank statements (last 3-6 months)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check9">
+                    <label for="check9">Employment letter or proof of income</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check10">
+                    <label for="check10">Travel itinerary</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check11">
+                    <label for="check11">Accommodation booking</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check12">
+                    <label for="check12">Travel insurance</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check13">
+                    <label for="check13">Return flight ticket</label>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3 class="checklist-title">3. VISA APPLICATION</h3>
+                <p class="checklist-subtitle">1-2 months before travel</p>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check14">
+                    <label for="check14">Complete visa application form</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check15">
+                    <label for="check15">Pay visa fees</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check16">
+                    <label for="check16">Book visa appointment (if required)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check17">
+                    <label for="check17">Submit all documents</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check18">
+                    <label for="check18">Track application status</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check19">
+                    <label for="check19">Receive visa approval</label>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3 class="checklist-title">4. FINAL PREPARATIONS</h3>
+                <p class="checklist-subtitle">2 weeks before travel</p>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check20">
+                    <label for="check20">Book flights</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check21">
+                    <label for="check21">Book accommodation</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check22">
+                    <label for="check22">Notify bank of travel dates</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check23">
+                    <label for="check23">Get travel vaccines (if needed)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check24">
+                    <label for="check24">Buy travel insurance</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check25">
+                    <label for="check25">Pack essentials</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check26">
+                    <label for="check26">Make copies of important documents</label>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3 class="checklist-title">5. TRAVEL DAY</h3>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check27">
+                    <label for="check27">Passport and visa</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check28">
+                    <label for="check28">Flight tickets</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check29">
+                    <label for="check29">Accommodation confirmation</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check30">
+                    <label for="check30">Travel insurance documents</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check31">
+                    <label for="check31">Emergency contacts list</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="check32">
+                    <label for="check32">InstaGo support number</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Not Ready Yet?</h2>
+            <p>Start preparing with our Free Travel Planning Checklist - everything you need to organize your trip in one simple guide.</p>
+            <button class="download-btn" onclick="downloadChecklist()">📥 Download Free Checklist</button>
+            <p class="support-text">Need help with any of these steps?</p>
+            <a href="https://calendly.com/instagoedtravels-info/30min" target="_blank" class="consultation-btn">📅 Book a Free Consultation</a>
+        </div>
+
+        <button class="save-btn" onclick="savePlanner()">Save My Travel Plan</button>
+    </div>
+
+    <script>
+        // Budget calculation
+        function updateBudget() {
+            const flight = parseFloat(document.getElementById('flightInput').value) || 0;
+            const accom = parseFloat(document.getElementById('accomInput').value) || 0;
+            const visa = parseFloat(document.getElementById('visaInput').value) || 0;
+            const act = parseFloat(document.getElementById('actInput').value) || 0;
+            
+            document.getElementById('flightBudget').textContent = flight.toLocaleString();
+            document.getElementById('accomBudget').textContent = accom.toLocaleString();
+            document.getElementById('visaBudget').textContent = visa.toLocaleString();
+            document.getElementById('actBudget').textContent = act.toLocaleString();
+            
+            const total = flight + accom + visa + act;
+            document.getElementById('totalBudget').textContent = total.toLocaleString();
+        }
+
+        document.getElementById('flightInput').addEventListener('input', updateBudget);
+        document.getElementById('accomInput').addEventListener('input', updateBudget);
+        document.getElementById('visaInput').addEventListener('input', updateBudget);
+        document.getElementById('actInput').addEventListener('input', updateBudget);
+
+        function downloadChecklist() {
+            alert('Your free travel planning checklist is being prepared for download! 🎉\n\nIn a real implementation, this would download a beautifully designed PDF checklist with all these items.');
+        }
+
+        function savePlanner() {
+            const data = {
+                destination: document.getElementById('destination').value,
+                dates: document.getElementById('dates').value,
+                travelers: document.getElementById('travelers').value,
+                travelStyle: document.getElementById('travelStyle').value,
+                preferences: document.getElementById('preferences').value,
+                budget: {
+                    flights: document.getElementById('flightInput').value,
+                    accommodation: document.getElementById('accomInput').value,
+                    visaFees: document.getElementById('visaInput').value,
+                    activities: document.getElementById('actInput').value
+                }
+            };
+
+            const checkboxes = document.querySelectorAll('.checkbox:checked');
+            const progress = Math.round((checkboxes.length / 32) * 100);
+
+            alert('✨ Your travel plan has been saved!\n\nProgress: ' + progress + '% complete\nDestination: ' + (data.destination || 'Not specified') + '\nBudget: $' + document.getElementById('totalBudget').textContent + '\n\nOur travel specialists at InstaGo will review your plan and reach out within 24 hours.');
+        }
+    </script>
+</body>
+</html>
