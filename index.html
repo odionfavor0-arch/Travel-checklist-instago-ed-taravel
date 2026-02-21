@@ -585,7 +585,68 @@
         document.getElementById('actInput').addEventListener('input', updateBudget);
 
         function downloadChecklist() {
-            alert('Your free travel planning checklist is being prepared for download! 🎉\n\nIn a real implementation, this would download a beautifully designed PDF checklist with all these items.');
+            // Create a text version of the checklist
+            let checklistText = `INSTAGO ED TRAVEL - COMPLETE TRAVEL PLANNING CHECKLIST
+
+1. BEFORE YOU BOOK (2-3 months out)
+☐ Decide on destination and travel dates
+☐ Check passport expiration (needs 6+ months validity)
+☐ Research visa requirements for destination
+☐ Set travel budget (flights, accommodation, visa fees)
+☐ Consult with InstaGo about visa process
+
+2. DOCUMENTS YOU'LL NEED
+☐ Valid passport
+☐ Recent passport photos (2x2 inches)
+☐ Bank statements (last 3-6 months)
+☐ Employment letter or proof of income
+☐ Travel itinerary
+☐ Accommodation booking
+☐ Travel insurance
+☐ Return flight ticket
+
+3. VISA APPLICATION (1-2 months before travel)
+☐ Complete visa application form
+☐ Pay visa fees
+☐ Book visa appointment (if required)
+☐ Submit all documents
+☐ Track application status
+☐ Receive visa approval
+
+4. FINAL PREPARATIONS (2 weeks before travel)
+☐ Book flights
+☐ Book accommodation
+☐ Notify bank of travel dates
+☐ Get travel vaccines (if needed)
+☐ Buy travel insurance
+☐ Pack essentials
+☐ Make copies of important documents
+
+5. TRAVEL DAY
+☐ Passport and visa
+☐ Flight tickets
+☐ Accommodation confirmation
+☐ Travel insurance documents
+☐ Emergency contacts list
+☐ InstaGo support number
+
+Need help with any of these steps?
+Book a free consultation: https://calendly.com/instagoedtravels-info/30min
+
+Contact InstaGo Ed Travel for all your travel needs!`;
+
+            // Create a blob and download
+            const blob = new Blob([checklistText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'InstaGo-Travel-Planning-Checklist.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            alert('✨ Your checklist has been downloaded!\n\nCheck your Downloads folder for "InstaGo-Travel-Planning-Checklist.txt"');
         }
 
         function savePlanner() {
