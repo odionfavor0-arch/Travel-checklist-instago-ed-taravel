@@ -471,28 +471,82 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
-        .save-btn {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 15px 50px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: block;
-            margin: 30px auto 0;
-        }
-
-        .save-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-
         .support-text {
             margin-top: 20px;
             font-size: 1.05em;
+        }
+
+
+        .closing-banner {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 50px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .closing-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #1e3c72, #ff6b9d, #7b4397);
+        }
+
+        .closing-banner .plane-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50%       { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .closing-banner h2 {
+            font-size: 2.2em;
+            font-weight: 300;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            letter-spacing: 1px;
+        }
+
+        .closing-banner h2 em {
+            font-style: italic;
+            color: #ff6b9d;
+        }
+
+        .closing-banner .message {
+            font-size: 1.15em;
+            color: #555;
+            line-height: 1.9;
+            max-width: 680px;
+            margin: 0 auto 30px;
+        }
+
+        .closing-banner .message strong {
+            color: #1e3c72;
+        }
+
+        .closing-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #1e3c72, #ff6b9d);
+            border-radius: 50px;
+            margin: 30px auto;
+        }
+
+        .closing-banner .tagline {
+            font-size: 1em;
+            color: #888;
+            font-style: italic;
+            letter-spacing: 2px;
         }
 
         @keyframes fadeIn {
@@ -566,12 +620,12 @@
                 <div class="currency-selector">
                     <label for="currencySelect">Currency:</label>
                     <select id="currencySelect" onchange="updateBudget()">
-                        <option value="$">$ USD</option>
-                        <option value="₦">₦ NGN</option>
-                        <option value="£">£ GBP</option>
-                        <option value="€">€ EUR</option>
-                        <option value="C$">C$ CAD</option>
-                        <option value="A$">A$ AUD</option>
+                        <option value="$">USD — $</option>
+                        <option value="₦">NGN — ₦</option>
+                        <option value="£">GBP — £</option>
+                        <option value="€">EUR — €</option>
+                        <option value="C$">CAD — C$</option>
+                        <option value="A$">AUD — A$</option>
                     </select>
                 </div>
             </div>
@@ -647,47 +701,47 @@
             <div class="checklist-section">
                 <h3 class="checklist-title">1. BEFORE YOU BOOK</h3>
                 <p class="checklist-subtitle">2-3 months out</p>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check1"><label for="check1">Decide on destination and travel dates</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check2"><label for="check2">Check passport expiration (needs 6+ months validity)</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check3"><label for="check3">Research visa requirements for destination</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check4"><label for="check4">Set travel budget (flights, accommodation, visa fees)</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check5"><label for="check5">Consult with InstaGo about visa process</label>
                 </div>
             </div>
 
             <div class="checklist-section">
                 <h3 class="checklist-title">2. DOCUMENTS YOU'LL NEED</h3>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check6"><label for="check6">Valid passport</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check7"><label for="check7">Recent passport photos (2x2 inches)</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check8"><label for="check8">Bank statements (last 3-6 months)</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check9"><label for="check9">Employment letter or proof of income</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check10"><label for="check10">Travel itinerary</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check11"><label for="check11">Accommodation booking</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check12"><label for="check12">Travel insurance</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check13"><label for="check13">Return flight ticket</label>
                 </div>
             </div>
@@ -695,22 +749,22 @@
             <div class="checklist-section">
                 <h3 class="checklist-title">3. VISA APPLICATION</h3>
                 <p class="checklist-subtitle">1-2 months before travel</p>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check14"><label for="check14">Complete visa application form</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check15"><label for="check15">Pay visa fees</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check16"><label for="check16">Book visa appointment (if required)</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check17"><label for="check17">Submit all documents</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check18"><label for="check18">Track application status</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check19"><label for="check19">Receive visa approval</label>
                 </div>
             </div>
@@ -718,47 +772,47 @@
             <div class="checklist-section">
                 <h3 class="checklist-title">4. FINAL PREPARATIONS</h3>
                 <p class="checklist-subtitle">2 weeks before travel</p>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check20"><label for="check20">Book flights</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check21"><label for="check21">Book accommodation</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check22"><label for="check22">Notify bank of travel dates</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check23"><label for="check23">Get travel vaccines (if needed)</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check24"><label for="check24">Buy travel insurance</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check25"><label for="check25">Pack essentials</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check26"><label for="check26">Make copies of important documents</label>
                 </div>
             </div>
 
             <div class="checklist-section">
                 <h3 class="checklist-title">5. TRAVEL DAY</h3>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check27"><label for="check27">Passport and visa</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check28"><label for="check28">Flight tickets</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check29"><label for="check29">Accommodation confirmation</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check30"><label for="check30">Travel insurance documents</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check31"><label for="check31">Emergency contacts list</label>
                 </div>
-                <div class="checklist-item" onclick="toggleCheck(this)">
+                <div class="checklist-item" onclick="toggleCheck(this, event)">
                     <input type="checkbox" class="checkbox" id="check32"><label for="check32">InstaGo support number</label>
                 </div>
             </div>
@@ -772,7 +826,18 @@
             <a href="https://calendly.com/instagoedtravels-info/30min" target="_blank" class="consultation-btn">📅 Book a Free Consultation</a>
         </div>
 
-        <button class="save-btn" onclick="savePlanner()">Save My Travel Plan</button>
+
+
+        <div class="closing-banner">
+            <h2>This is more than a checklist.</h2>
+            <div class="closing-divider"></div>
+            <p class="message">
+                Every box you check is a step closer to the trip you've been thinking about.
+                You're not just preparing documents — you're preparing yourself.
+                <strong>InstaGo is here to make sure nothing stands between you and that boarding pass.</strong>
+            </p>
+            <p class="tagline">The journey starts before you leave home.</p>
+        </div>
     </div>
 
     <script>
@@ -782,6 +847,8 @@
         }
 
         function setCurrencySymbols(sym) {
+            // For C$ and A$, the symbol IS the full label — no extra $ needed
+            // We display the full symbol in the first span and nothing extra
             document.querySelectorAll('.currency-sym').forEach(el => el.textContent = sym);
         }
 
@@ -848,8 +915,14 @@
         // ─── CHECKLIST ───────────────────────────────────────────
         const TOTAL_CHECKS = 32;
 
-        function toggleCheck(item) {
+        function toggleCheck(item, event) {
             const cb = item.querySelector('.checkbox');
+            // If the click came directly from the checkbox, don't double-toggle
+            if (event && event.target === cb) {
+                item.classList.toggle('checked', cb.checked);
+                updateProgress();
+                return;
+            }
             cb.checked = !cb.checked;
             item.classList.toggle('checked', cb.checked);
             updateProgress();
@@ -1011,12 +1084,12 @@ textarea{resize:vertical;min-height:100px}
         <label for="dl-currency">Currency:</label>
         <select id="dl-currency" onchange="dlUpdateBudget()">
           <option value="${sym}" selected>${sym}</option>
-          <option value="$">$ USD</option>
-          <option value="₦">₦ NGN</option>
-          <option value="£">£ GBP</option>
-          <option value="€">€ EUR</option>
-          <option value="C$">C$ CAD</option>
-          <option value="A$">A$ AUD</option>
+          <option value="$">USD — $</option>
+          <option value="₦">NGN — ₦</option>
+          <option value="£">GBP — £</option>
+          <option value="€">EUR — €</option>
+          <option value="C$">CAD — C$</option>
+          <option value="A$">AUD — A$</option>
         </select>
       </div>
     </div>
@@ -1074,7 +1147,7 @@ textarea{resize:vertical;min-height:100px}
         'Research visa requirements for destination',
         'Set travel budget (flights, accommodation, visa fees)',
         'Consult with InstaGo about visa process'
-      ].map((t,i)=>`<div class="checklist-item${checkStates[i]?' checked':''}" onclick="dlToggle(this)"><input type="checkbox" class="checkbox" id="dc${i+1}"${checkStates[i]?' checked':''}><label for="dc${i+1}">${t}</label></div>`).join('')}
+      ].map((t,i)=>`<div class="checklist-item${checkStates[i]?' checked':''}" onclick="dlToggle(this,event)"><input type="checkbox" class="checkbox" id="dc${i+1}"${checkStates[i]?' checked':''}><label for="dc${i+1}">${t}</label></div>`).join('')}
     </div>
 
     <div class="checklist-section">
@@ -1083,7 +1156,7 @@ textarea{resize:vertical;min-height:100px}
         'Valid passport','Recent passport photos (2x2 inches)','Bank statements (last 3-6 months)',
         'Employment letter or proof of income','Travel itinerary','Accommodation booking',
         'Travel insurance','Return flight ticket'
-      ].map((t,i)=>`<div class="checklist-item${checkStates[i+5]?' checked':''}" onclick="dlToggle(this)"><input type="checkbox" class="checkbox" id="dc${i+6}"${checkStates[i+5]?' checked':''}><label for="dc${i+6}">${t}</label></div>`).join('')}
+      ].map((t,i)=>`<div class="checklist-item${checkStates[i+5]?' checked':''}" onclick="dlToggle(this,event)"><input type="checkbox" class="checkbox" id="dc${i+6}"${checkStates[i+5]?' checked':''}><label for="dc${i+6}">${t}</label></div>`).join('')}
     </div>
 
     <div class="checklist-section">
@@ -1091,7 +1164,7 @@ textarea{resize:vertical;min-height:100px}
       ${[
         'Complete visa application form','Pay visa fees','Book visa appointment (if required)',
         'Submit all documents','Track application status','Receive visa approval'
-      ].map((t,i)=>`<div class="checklist-item${checkStates[i+13]?' checked':''}" onclick="dlToggle(this)"><input type="checkbox" class="checkbox" id="dc${i+14}"${checkStates[i+13]?' checked':''}><label for="dc${i+14}">${t}</label></div>`).join('')}
+      ].map((t,i)=>`<div class="checklist-item${checkStates[i+13]?' checked':''}" onclick="dlToggle(this,event)"><input type="checkbox" class="checkbox" id="dc${i+14}"${checkStates[i+13]?' checked':''}><label for="dc${i+14}">${t}</label></div>`).join('')}
     </div>
 
     <div class="checklist-section">
@@ -1100,7 +1173,7 @@ textarea{resize:vertical;min-height:100px}
         'Book flights','Book accommodation','Notify bank of travel dates',
         'Get travel vaccines (if needed)','Buy travel insurance','Pack essentials',
         'Make copies of important documents'
-      ].map((t,i)=>`<div class="checklist-item${checkStates[i+19]?' checked':''}" onclick="dlToggle(this)"><input type="checkbox" class="checkbox" id="dc${i+20}"${checkStates[i+19]?' checked':''}><label for="dc${i+20}">${t}</label></div>`).join('')}
+      ].map((t,i)=>`<div class="checklist-item${checkStates[i+19]?' checked':''}" onclick="dlToggle(this,event)"><input type="checkbox" class="checkbox" id="dc${i+20}"${checkStates[i+19]?' checked':''}><label for="dc${i+20}">${t}</label></div>`).join('')}
     </div>
 
     <div class="checklist-section">
@@ -1108,7 +1181,7 @@ textarea{resize:vertical;min-height:100px}
       ${[
         'Passport and visa','Flight tickets','Accommodation confirmation',
         'Travel insurance documents','Emergency contacts list','InstaGo support number'
-      ].map((t,i)=>`<div class="checklist-item${checkStates[i+26]?' checked':''}" onclick="dlToggle(this)"><input type="checkbox" class="checkbox" id="dc${i+27}"${checkStates[i+26]?' checked':''}><label for="dc${i+27}">${t}</label></div>`).join('')}
+      ].map((t,i)=>`<div class="checklist-item${checkStates[i+26]?' checked':''}" onclick="dlToggle(this,event)"><input type="checkbox" class="checkbox" id="dc${i+27}"${checkStates[i+26]?' checked':''}><label for="dc${i+27}">${t}</label></div>`).join('')}
     </div>
   </div>
 
@@ -1154,9 +1227,10 @@ function dlUpdateBudget(){
     tip.textContent=msg;tip.classList.add('visible');
   }else{bd.style.display='none'}
 }
-function dlToggle(item){
-  const cb=item.querySelector('.checkbox');cb.checked=!cb.checked;
-  item.classList.toggle('checked',cb.checked);dlUpdateProgress();
+function dlToggle(item,event){
+  const cb=item.querySelector('.checkbox');
+  if(event&&event.target===cb){item.classList.toggle('checked',cb.checked);dlUpdateProgress();return;}
+  cb.checked=!cb.checked;item.classList.toggle('checked',cb.checked);dlUpdateProgress();
 }
 function dlUpdateProgress(){
   const checked=document.querySelectorAll('.checkbox:checked').length;
@@ -1183,16 +1257,6 @@ dlUpdateBudget();
             URL.revokeObjectURL(url);
         }
 
-        // ─── SAVE ─────────────────────────────────────────────────
-        function savePlanner() {
-            const destination = document.getElementById('destination').value;
-            const checked = document.querySelectorAll('.checkbox:checked').length;
-            const progress = Math.round((checked / TOTAL_CHECKS) * 100);
-            const sym = getCurrency();
-            const total = document.getElementById('totalBudget').textContent;
-
-            alert('✨ Your travel plan has been saved!\n\nProgress: ' + progress + '% complete (' + checked + ' / ' + TOTAL_CHECKS + ' tasks)\nDestination: ' + (destination || 'Not specified') + '\nBudget: ' + sym + total + '\n\nOur travel specialists at InstaGo will review your plan and reach out within 24 hours.');
-        }
     </script>
 </body>
 </html>
