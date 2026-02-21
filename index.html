@@ -692,6 +692,50 @@
             font-weight: 600;
         }
 
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+            color: #1e3c72;
+            font-weight: 600;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .budget-input {
+            margin-top: 10px;
+            width: calc(100% - 20px);
+            padding: 8px;
+            text-align: center;
+            font-size: 1em;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border-radius: 8px;
+        }
+
+        .budget-input:focus {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+        }
+
+        .budget-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
         .budget-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -837,25 +881,33 @@
             <div class="info-grid">
                 <div class="info-item">
                     <div class="info-label">Destination</div>
-                    <div class="info-value">${destination}</div>
+                    <input type="text" id="dest" value="${destination}" placeholder="Enter destination">
                 </div>
                 <div class="info-item">
                     <div class="info-label">Travel Dates</div>
-                    <div class="info-value">${dates}</div>
+                    <input type="text" id="tdates" value="${dates}" placeholder="e.g., Dec 15-22, 2024">
                 </div>
                 <div class="info-item">
                     <div class="info-label">Number of Travelers</div>
-                    <div class="info-value">${travelers}</div>
+                    <input type="number" id="trav" value="${travelers}" min="1" placeholder="1">
                 </div>
                 <div class="info-item">
                     <div class="info-label">Travel Style</div>
-                    <div class="info-value">${travelStyle}</div>
+                    <select id="style">
+                        <option value="${travelStyle}" selected>${travelStyle}</option>
+                        <option value="Luxury & Indulgence">Luxury & Indulgence</option>
+                        <option value="Adventure & Exploration">Adventure & Exploration</option>
+                        <option value="Cultural Immersion">Cultural Immersion</option>
+                        <option value="Rest & Rejuvenation">Rest & Rejuvenation</option>
+                        <option value="Family Experience">Family Experience</option>
+                        <option value="Romantic Escape">Romantic Escape</option>
+                    </select>
                 </div>
             </div>
 
             <div class="info-item" style="margin-top: 20px;">
                 <div class="info-label">Special Requests & Preferences</div>
-                <div class="info-value" style="font-size: 1em; line-height: 1.6;">${preferences}</div>
+                <textarea id="prefs">${preferences}</textarea>
             </div>
         </div>
 
