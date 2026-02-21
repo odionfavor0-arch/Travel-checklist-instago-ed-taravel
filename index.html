@@ -746,7 +746,7 @@
         .budget-card {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
             text-align: center;
         }
@@ -761,6 +761,31 @@
         .budget-card .amount {
             font-size: 2em;
             font-weight: 300;
+            margin-bottom: 15px;
+        }
+
+        .budget-card input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.9);
+            color: #1e3c72;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .budget-card input[type="number"]:focus {
+            background: white;
+            border-color: #ff6b9d;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.2);
+            outline: none;
+        }
+
+        .budget-card input[type="number"]::placeholder {
+            color: #999;
         }
 
         .total-budget {
