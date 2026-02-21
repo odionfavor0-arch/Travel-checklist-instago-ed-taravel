@@ -981,7 +981,94 @@
                     <label for="c18">Track application status</label>
                 </div>
                 <div class="checklist-item">
-                    <input type="checkbox" class="checkbox
+                    <input type="checkbox" class="checkbox" id="c19">
+                    <label for="c19">Receive visa approval</label>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3 class="checklist-title">4. FINAL PREPARATIONS</h3>
+                <p class="checklist-subtitle">2 weeks before travel</p>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c20">
+                    <label for="c20">Book flights</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c21">
+                    <label for="c21">Book accommodation</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c22">
+                    <label for="c22">Notify bank of travel dates</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c23">
+                    <label for="c23">Get travel vaccines (if needed)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c24">
+                    <label for="c24">Buy travel insurance</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c25">
+                    <label for="c25">Pack essentials</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c26">
+                    <label for="c26">Make copies of important documents</label>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3 class="checklist-title">5. TRAVEL DAY</h3>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c27">
+                    <label for="c27">Passport and visa</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c28">
+                    <label for="c28">Flight tickets</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c29">
+                    <label for="c29">Accommodation confirmation</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c30">
+                    <label for="c30">Travel insurance documents</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c31">
+                    <label for="c31">Emergency contacts list</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" class="checkbox" id="c32">
+                    <label for="c32">InstaGo support number</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h2>Need Help With Your Travel Plans?</h2>
+            <p>Our travel specialists are here to make your journey seamless</p>
+            <a href="https://calendly.com/instagoedtravels-info/30min" class="cta-btn" target="_blank">📅 Book a Free Consultation</a>
+            <p style="margin-top: 25px; font-size: 0.95em;">Contact InstaGo Ed Travel - We turn your travel dreams into reality ✈️</p>
+        </div>
+    </div>
+</body>
+</html>`;
+
+            // Create blob and download
+            const blob = new Blob([completePlanner], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'My-InstaGo-Travel-Plan.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
 
         function savePlanner() {
             const data = {
