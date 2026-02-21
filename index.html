@@ -1,9 +1,4 @@
-
-# Let me create a properly escaped version of the HTML file
-# The issue is that the template literal inside downloadChecklist() contains unescaped backticks and ${} 
-# which breaks when embedded in the HTML
-
-html_content = '''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -158,6 +153,16 @@ html_content = '''<!DOCTYPE html>
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
+        .checklist-item.checked {
+            background: #f0f7f0;
+            opacity: 0.75;
+        }
+
+        .checklist-item.checked label {
+            text-decoration: line-through;
+            color: #888;
+        }
+
         .checkbox {
             width: 20px;
             height: 20px;
@@ -174,11 +179,46 @@ html_content = '''<!DOCTYPE html>
             line-height: 1.5;
         }
 
+        /* ===================== BUDGET SECTION ===================== */
+
+        .budget-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .currency-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .currency-selector label {
+            color: #1e3c72;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .currency-selector select {
+            padding: 8px 12px;
+            border: 2px solid #1e3c72;
+            border-radius: 8px;
+            font-size: 0.95em;
+            color: #1e3c72;
+            font-weight: 600;
+            cursor: pointer;
+            background: white;
+        }
+
         .budget-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .budget-card {
@@ -187,6 +227,12 @@ html_content = '''<!DOCTYPE html>
             padding: 20px;
             border-radius: 12px;
             text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .budget-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(30, 60, 114, 0.35);
         }
 
         .budget-card h3 {
@@ -197,8 +243,171 @@ html_content = '''<!DOCTYPE html>
         }
 
         .budget-card .amount {
-            font-size: 2em;
+            font-size: 1.8em;
             font-weight: 300;
+            margin-bottom: 14px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .budget-card .amount.updated {
+            transform: scale(1.08);
+            color: #a8e6cf;
+        }
+
+        .budget-card input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Georgia', serif;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .budget-card input[type="number"]::placeholder {
+            color: rgba(255,255,255,0.55);
+        }
+
+        .budget-card input[type="number"]:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255,255,255,0.25);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.15);
+        }
+
+        /* Remove spinner arrows from number inputs */
+        .budget-card input[type="number"]::-webkit-inner-spin-button,
+        .budget-card input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .budget-card input[type="number"] { -moz-appearance: textfield; }
+
+        .budget-card.total-card {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+            grid-column: 1 / -1;
+        }
+
+        .budget-card.total-card .amount {
+            font-size: 2.4em;
+        }
+
+        .budget-breakdown {
+            background: #f8f9ff;
+            border: 2px solid #e8eaf6;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-top: 20px;
+        }
+
+        .budget-breakdown h4 {
+            color: #1e3c72;
+            font-size: 1em;
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+
+        .breakdown-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .breakdown-label {
+            width: 130px;
+            font-size: 0.85em;
+            color: #555;
+            flex-shrink: 0;
+        }
+
+        .breakdown-bar-wrap {
+            flex: 1;
+            background: #e0e0e0;
+            border-radius: 50px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .breakdown-bar {
+            height: 100%;
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .bar-flight  { background: linear-gradient(90deg, #1e3c72, #2a5298); }
+        .bar-accom   { background: linear-gradient(90deg, #7b4397, #a855f7); }
+        .bar-visa    { background: linear-gradient(90deg, #ff6b9d, #ff8fab); }
+        .bar-act     { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+        .breakdown-pct {
+            width: 42px;
+            font-size: 0.82em;
+            color: #1e3c72;
+            font-weight: 600;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .budget-tip {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: #fff8e1;
+            border-left: 4px solid #f59e0b;
+            border-radius: 6px;
+            font-size: 0.85em;
+            color: #7c5c00;
+            display: none;
+        }
+
+        .budget-tip.visible { display: block; }
+
+        /* ===================== END BUDGET ===================== */
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .progress-label {
+            color: #1e3c72;
+            font-size: 0.95em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .progress-track {
+            flex: 1;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1e3c72, #ff6b9d);
+            border-radius: 50px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .progress-pct {
+            color: #ff6b9d;
+            font-weight: 700;
+            font-size: 1em;
+            min-width: 40px;
+            text-align: right;
         }
 
         .cta-section {
@@ -292,21 +501,11 @@ html_content = '''<!DOCTYPE html>
         }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .planner-card {
-                padding: 30px 20px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .checklist-section {
-                padding: 20px;
-            }
+            .header h1 { font-size: 2em; }
+            .planner-card { padding: 30px 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .checklist-section { padding: 20px; }
+            .budget-card.total-card { grid-column: unset; }
         }
     </style>
 </head>
@@ -318,28 +517,25 @@ html_content = '''<!DOCTYPE html>
             <p>Everything you need to organize your journey</p>
         </div>
 
+        <!-- TRIP DETAILS -->
         <div class="planner-card">
             <h2 class="section-title">
                 <span class="icon">🌍</span>
                 Trip Details
             </h2>
-            
             <div class="form-grid">
                 <div class="form-group">
                     <label>Destination</label>
                     <input type="text" id="destination" placeholder="Where dreams take you...">
                 </div>
-                
                 <div class="form-group">
                     <label>Travel Dates</label>
                     <input type="text" id="dates" placeholder="e.g., Dec 15-22, 2024">
                 </div>
-                
                 <div class="form-group">
                     <label>Number of Travelers</label>
                     <input type="number" id="travelers" min="1" placeholder="1">
                 </div>
-                
                 <div class="form-group">
                     <label>Travel Style</label>
                     <select id="travelStyle">
@@ -353,205 +549,217 @@ html_content = '''<!DOCTYPE html>
                     </select>
                 </div>
             </div>
-
             <div class="form-group">
                 <label>Special Requests & Preferences</label>
                 <textarea id="preferences" placeholder="Dietary requirements, accessibility needs, celebration occasions, must-see experiences..."></textarea>
             </div>
         </div>
 
+        <!-- BUDGET PLANNING -->
         <div class="planner-card">
             <h2 class="section-title">
                 <span class="icon">💰</span>
                 Budget Planning
             </h2>
 
-            <div class="budget-section">
-                <div class="budget-card">
-                    <h3>Flights</h3>
-                    <div class="amount">$<span id="flightBudget">0</span></div>
-                    <input type="number" id="flightInput" style="margin-top: 10px; width: 100%;" placeholder="Enter amount">
-                </div>
-                
-                <div class="budget-card">
-                    <h3>Accommodation</h3>
-                    <div class="amount">$<span id="accomBudget">0</span></div>
-                    <input type="number" id="accomInput" style="margin-top: 10px; width: 100%;" placeholder="Enter amount">
-                </div>
-                
-                <div class="budget-card">
-                    <h3>Visa Fees</h3>
-                    <div class="amount">$<span id="visaBudget">0</span></div>
-                    <input type="number" id="visaInput" style="margin-top: 10px; width: 100%;" placeholder="Enter amount">
-                </div>
-                
-                <div class="budget-card">
-                    <h3>Activities</h3>
-                    <div class="amount">$<span id="actBudget">0</span></div>
-                    <input type="number" id="actInput" style="margin-top: 10px; width: 100%;" placeholder="Enter amount">
+            <div class="budget-header-row">
+                <div class="currency-selector">
+                    <label for="currencySelect">Currency:</label>
+                    <select id="currencySelect" onchange="updateBudget()">
+                        <option value="$">$ USD</option>
+                        <option value="₦">₦ NGN</option>
+                        <option value="£">£ GBP</option>
+                        <option value="€">€ EUR</option>
+                        <option value="C$">C$ CAD</option>
+                        <option value="A$">A$ AUD</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="budget-card" style="background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);">
-                <h3>Total Estimated Budget</h3>
-                <div class="amount">$<span id="totalBudget">0</span></div>
+            <div class="budget-section">
+                <div class="budget-card">
+                    <h3>✈️ Flights</h3>
+                    <div class="amount" id="flightDisplay"><span class="currency-sym">$</span><span id="flightBudget">0</span></div>
+                    <input type="number" id="flightInput" placeholder="Enter amount" min="0" oninput="updateBudget()">
+                </div>
+                <div class="budget-card">
+                    <h3>🏨 Accommodation</h3>
+                    <div class="amount" id="accomDisplay"><span class="currency-sym">$</span><span id="accomBudget">0</span></div>
+                    <input type="number" id="accomInput" placeholder="Enter amount" min="0" oninput="updateBudget()">
+                </div>
+                <div class="budget-card">
+                    <h3>🛂 Visa Fees</h3>
+                    <div class="amount" id="visaDisplay"><span class="currency-sym">$</span><span id="visaBudget">0</span></div>
+                    <input type="number" id="visaInput" placeholder="Enter amount" min="0" oninput="updateBudget()">
+                </div>
+                <div class="budget-card">
+                    <h3>🎯 Activities</h3>
+                    <div class="amount" id="actDisplay"><span class="currency-sym">$</span><span id="actBudget">0</span></div>
+                    <input type="number" id="actInput" placeholder="Enter amount" min="0" oninput="updateBudget()">
+                </div>
+                <div class="budget-card total-card">
+                    <h3>💳 Total Estimated Budget</h3>
+                    <div class="amount"><span class="currency-sym">$</span><span id="totalBudget">0</span></div>
+                </div>
+            </div>
+
+            <!-- Breakdown bars -->
+            <div class="budget-breakdown" id="budgetBreakdown" style="display:none;">
+                <h4>📊 Budget Breakdown</h4>
+                <div class="breakdown-bar-row">
+                    <span class="breakdown-label">✈️ Flights</span>
+                    <div class="breakdown-bar-wrap"><div class="breakdown-bar bar-flight" id="barFlight"></div></div>
+                    <span class="breakdown-pct" id="pctFlight">0%</span>
+                </div>
+                <div class="breakdown-bar-row">
+                    <span class="breakdown-label">🏨 Accommodation</span>
+                    <div class="breakdown-bar-wrap"><div class="breakdown-bar bar-accom" id="barAccom"></div></div>
+                    <span class="breakdown-pct" id="pctAccom">0%</span>
+                </div>
+                <div class="breakdown-bar-row">
+                    <span class="breakdown-label">🛂 Visa Fees</span>
+                    <div class="breakdown-bar-wrap"><div class="breakdown-bar bar-visa" id="barVisa"></div></div>
+                    <span class="breakdown-pct" id="pctVisa">0%</span>
+                </div>
+                <div class="breakdown-bar-row">
+                    <span class="breakdown-label">🎯 Activities</span>
+                    <div class="breakdown-bar-wrap"><div class="breakdown-bar bar-act" id="barAct"></div></div>
+                    <span class="breakdown-pct" id="pctAct">0%</span>
+                </div>
+                <div class="budget-tip" id="budgetTip"></div>
             </div>
         </div>
 
+        <!-- CHECKLIST -->
         <div class="planner-card">
             <h2 class="section-title">
                 <span class="icon">✅</span>
                 Your Travel Planning Checklist
             </h2>
 
+            <div class="progress-row">
+                <span class="progress-label">Progress:</span>
+                <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+                <span class="progress-pct" id="progressPct">0%</span>
+                <span class="progress-label" id="progressCount" style="color:#888; font-weight:400;">0 / 32</span>
+            </div>
+
             <div class="checklist-section">
                 <h3 class="checklist-title">1. BEFORE YOU BOOK</h3>
                 <p class="checklist-subtitle">2-3 months out</p>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check1">
-                    <label for="check1">Decide on destination and travel dates</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check1"><label for="check1">Decide on destination and travel dates</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check2">
-                    <label for="check2">Check passport expiration (needs 6+ months validity)</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check2"><label for="check2">Check passport expiration (needs 6+ months validity)</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check3">
-                    <label for="check3">Research visa requirements for destination</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check3"><label for="check3">Research visa requirements for destination</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check4">
-                    <label for="check4">Set travel budget (flights, accommodation, visa fees)</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check4"><label for="check4">Set travel budget (flights, accommodation, visa fees)</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check5">
-                    <label for="check5">Consult with InstaGo about visa process</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check5"><label for="check5">Consult with InstaGo about visa process</label>
                 </div>
             </div>
 
             <div class="checklist-section">
                 <h3 class="checklist-title">2. DOCUMENTS YOU'LL NEED</h3>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check6">
-                    <label for="check6">Valid passport</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check6"><label for="check6">Valid passport</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check7">
-                    <label for="check7">Recent passport photos (2x2 inches)</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check7"><label for="check7">Recent passport photos (2x2 inches)</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check8">
-                    <label for="check8">Bank statements (last 3-6 months)</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check8"><label for="check8">Bank statements (last 3-6 months)</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check9">
-                    <label for="check9">Employment letter or proof of income</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check9"><label for="check9">Employment letter or proof of income</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check10">
-                    <label for="check10">Travel itinerary</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check10"><label for="check10">Travel itinerary</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check11">
-                    <label for="check11">Accommodation booking</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check11"><label for="check11">Accommodation booking</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check12">
-                    <label for="check12">Travel insurance</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check12"><label for="check12">Travel insurance</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check13">
-                    <label for="check13">Return flight ticket</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check13"><label for="check13">Return flight ticket</label>
                 </div>
             </div>
 
             <div class="checklist-section">
                 <h3 class="checklist-title">3. VISA APPLICATION</h3>
                 <p class="checklist-subtitle">1-2 months before travel</p>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check14">
-                    <label for="check14">Complete visa application form</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check14"><label for="check14">Complete visa application form</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check15">
-                    <label for="check15">Pay visa fees</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check15"><label for="check15">Pay visa fees</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check16">
-                    <label for="check16">Book visa appointment (if required)</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check16"><label for="check16">Book visa appointment (if required)</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check17">
-                    <label for="check17">Submit all documents</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check17"><label for="check17">Submit all documents</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check18">
-                    <label for="check18">Track application status</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check18"><label for="check18">Track application status</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check19">
-                    <label for="check19">Receive visa approval</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check19"><label for="check19">Receive visa approval</label>
                 </div>
             </div>
 
             <div class="checklist-section">
                 <h3 class="checklist-title">4. FINAL PREPARATIONS</h3>
                 <p class="checklist-subtitle">2 weeks before travel</p>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check20">
-                    <label for="check20">Book flights</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check20"><label for="check20">Book flights</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check21">
-                    <label for="check21">Book accommodation</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check21"><label for="check21">Book accommodation</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check22">
-                    <label for="check22">Notify bank of travel dates</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check22"><label for="check22">Notify bank of travel dates</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check23">
-                    <label for="check23">Get travel vaccines (if needed)</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check23"><label for="check23">Get travel vaccines (if needed)</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check24">
-                    <label for="check24">Buy travel insurance</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check24"><label for="check24">Buy travel insurance</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check25">
-                    <label for="check25">Pack essentials</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check25"><label for="check25">Pack essentials</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check26">
-                    <label for="check26">Make copies of important documents</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check26"><label for="check26">Make copies of important documents</label>
                 </div>
             </div>
 
             <div class="checklist-section">
                 <h3 class="checklist-title">5. TRAVEL DAY</h3>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check27">
-                    <label for="check27">Passport and visa</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check27"><label for="check27">Passport and visa</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check28">
-                    <label for="check28">Flight tickets</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check28"><label for="check28">Flight tickets</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check29">
-                    <label for="check29">Accommodation confirmation</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check29"><label for="check29">Accommodation confirmation</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check30">
-                    <label for="check30">Travel insurance documents</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check30"><label for="check30">Travel insurance documents</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check31">
-                    <label for="check31">Emergency contacts list</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check31"><label for="check31">Emergency contacts list</label>
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" class="checkbox" id="check32">
-                    <label for="check32">InstaGo support number</label>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" class="checkbox" id="check32"><label for="check32">InstaGo support number</label>
                 </div>
             </div>
         </div>
@@ -568,229 +776,424 @@ html_content = '''<!DOCTYPE html>
     </div>
 
     <script>
-        // Budget calculation
-        function updateBudget() {
-            const flight = parseFloat(document.getElementById('flightInput').value) || 0;
-            const accom = parseFloat(document.getElementById('accomInput').value) || 0;
-            const visa = parseFloat(document.getElementById('visaInput').value) || 0;
-            const act = parseFloat(document.getElementById('actInput').value) || 0;
-            
-            document.getElementById('flightBudget').textContent = flight.toLocaleString();
-            document.getElementById('accomBudget').textContent = accom.toLocaleString();
-            document.getElementById('visaBudget').textContent = visa.toLocaleString();
-            document.getElementById('actBudget').textContent = act.toLocaleString();
-            
-            const total = flight + accom + visa + act;
-            document.getElementById('totalBudget').textContent = total.toLocaleString();
+        // ─── BUDGET ──────────────────────────────────────────────
+        function getCurrency() {
+            return document.getElementById('currencySelect').value;
         }
 
-        document.getElementById('flightInput').addEventListener('input', updateBudget);
-        document.getElementById('accomInput').addEventListener('input', updateBudget);
-        document.getElementById('visaInput').addEventListener('input', updateBudget);
-        document.getElementById('actInput').addEventListener('input', updateBudget);
+        function setCurrencySymbols(sym) {
+            document.querySelectorAll('.currency-sym').forEach(el => el.textContent = sym);
+        }
 
+        function animateAmount(el) {
+            el.classList.add('updated');
+            setTimeout(() => el.classList.remove('updated'), 350);
+        }
+
+        function updateBudget() {
+            const sym = getCurrency();
+            setCurrencySymbols(sym);
+
+            const flight = Math.max(0, parseFloat(document.getElementById('flightInput').value) || 0);
+            const accom  = Math.max(0, parseFloat(document.getElementById('accomInput').value)  || 0);
+            const visa   = Math.max(0, parseFloat(document.getElementById('visaInput').value)   || 0);
+            const act    = Math.max(0, parseFloat(document.getElementById('actInput').value)    || 0);
+            const total  = flight + accom + visa + act;
+
+            document.getElementById('flightBudget').textContent = flight.toLocaleString();
+            document.getElementById('accomBudget').textContent  = accom.toLocaleString();
+            document.getElementById('visaBudget').textContent   = visa.toLocaleString();
+            document.getElementById('actBudget').textContent    = act.toLocaleString();
+            document.getElementById('totalBudget').textContent  = total.toLocaleString();
+
+            ['flightDisplay','accomDisplay','visaDisplay','actDisplay'].forEach(id => {
+                animateAmount(document.getElementById(id));
+            });
+
+            // Breakdown bars
+            const breakdown = document.getElementById('budgetBreakdown');
+            if (total > 0) {
+                breakdown.style.display = 'block';
+                const values = [
+                    { bar: 'barFlight', pct: 'pctFlight', val: flight },
+                    { bar: 'barAccom',  pct: 'pctAccom',  val: accom },
+                    { bar: 'barVisa',   pct: 'pctVisa',   val: visa },
+                    { bar: 'barAct',    pct: 'pctAct',    val: act },
+                ];
+                values.forEach(({ bar, pct, val }) => {
+                    const p = total > 0 ? Math.round((val / total) * 100) : 0;
+                    document.getElementById(bar).style.width = p + '%';
+                    document.getElementById(pct).textContent = p + '%';
+                });
+
+                // Smart tip
+                const tip = document.getElementById('budgetTip');
+                let msg = '';
+                if (flight / total > 0.5) msg = '💡 Tip: Flights are taking up over 50% of your budget. Consider searching for deals 2-3 months in advance or adjusting travel dates for better fares.';
+                else if (accom / total > 0.4) msg = '💡 Tip: Accommodation is a large portion of your budget. Comparing guesthouses, Airbnb, or travel packages may help you save.';
+                else if (act / total > 0.3) msg = '💡 Tip: Activities look well-budgeted! Make sure to leave a small buffer for unexpected expenses.';
+                else if (total > 0) msg = '✅ Your budget looks well-balanced across all categories. Great planning!';
+
+                if (msg) {
+                    tip.textContent = msg;
+                    tip.classList.add('visible');
+                } else {
+                    tip.classList.remove('visible');
+                }
+            } else {
+                breakdown.style.display = 'none';
+            }
+        }
+
+        // ─── CHECKLIST ───────────────────────────────────────────
+        const TOTAL_CHECKS = 32;
+
+        function toggleCheck(item) {
+            const cb = item.querySelector('.checkbox');
+            cb.checked = !cb.checked;
+            item.classList.toggle('checked', cb.checked);
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const checked = document.querySelectorAll('.checkbox:checked').length;
+            const pct = Math.round((checked / TOTAL_CHECKS) * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressPct').textContent = pct + '%';
+            document.getElementById('progressCount').textContent = checked + ' / ' + TOTAL_CHECKS;
+        }
+
+        // ─── DOWNLOAD ─────────────────────────────────────────────
         function downloadChecklist() {
-            // Get current form data
             const destination = document.getElementById('destination').value || 'Not specified';
-            const dates = document.getElementById('dates').value || 'Not specified';
-            const travelers = document.getElementById('travelers').value || 'Not specified';
+            const dates       = document.getElementById('dates').value       || 'Not specified';
+            const travelers   = document.getElementById('travelers').value   || 'Not specified';
             const travelStyle = document.getElementById('travelStyle').value || 'Not specified';
             const preferences = document.getElementById('preferences').value || 'Not specified';
-            
-            const flightBudget = document.getElementById('flightInput').value || '0';
-            const accomBudget = document.getElementById('accomInput').value || '0';
-            const visaBudget = document.getElementById('visaInput').value || '0';
-            const actBudget = document.getElementById('actInput').value || '0';
-            const totalBudget = (parseFloat(flightBudget) + parseFloat(accomBudget) + parseFloat(visaBudget) + parseFloat(actBudget)).toLocaleString();
 
-            // Build the HTML content for download using string concatenation instead of template literals
-            // to avoid escaping issues
-            var completePlanner = '<!DOCTYPE html>\n' +
-'<html lang="en">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>My InstaGo Travel Plan</title>\n' +
-'    <style>\n' +
-'        * { margin: 0; padding: 0; box-sizing: border-box; }\n' +
-'        body { font-family: \'Garamond\', \'Georgia\', serif; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7b4397 100%); min-height: 100vh; padding: 40px 20px; }\n' +
-'        .container { max-width: 1200px; margin: 0 auto; }\n' +
-'        .header { text-align: center; color: white; margin-bottom: 50px; }\n' +
-'        .brand-name { font-size: 1.2em; letter-spacing: 4px; opacity: 0.9; margin-bottom: 15px; font-weight: 400; }\n' +
-'        .header h1 { font-size: 3em; font-weight: 300; letter-spacing: 3px; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }\n' +
-'        .planner-card { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); margin-bottom: 30px; }\n' +
-'        .section-title { color: #1e3c72; font-size: 2em; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid #ff6b9d; display: flex; align-items: center; gap: 15px; }\n' +
-'        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px; }\n' +
-'        .info-item { background: linear-gradient(135deg, #f8f9ff 0%, #fff5f9 100%); padding: 20px; border-radius: 12px; border-left: 4px solid #1e3c72; }\n' +
-'        .info-label { color: #666; font-size: 0.9em; margin-bottom: 8px; font-weight: 600; }\n' +
-'        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; transition: all 0.3s ease; font-family: \'Georgia\', serif; color: #1e3c72; font-weight: 600; }\n' +
-'        input:focus, select:focus, textarea:focus { outline: none; border-color: #1e3c72; box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1); }\n' +
-'        textarea { resize: vertical; min-height: 80px; }\n' +
-'        .budget-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 25px; }\n' +
-'        .budget-card { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 20px; border-radius: 12px; text-align: center; }\n' +
-'        .budget-card h3 { font-size: 0.9em; opacity: 0.9; margin-bottom: 10px; font-weight: 400; }\n' +
-'        .budget-card .amount { font-size: 2em; font-weight: 300; margin-bottom: 15px; }\n' +
-'        .budget-card input[type="number"] { width: 100%; padding: 12px; border: 2px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.9); color: #1e3c72; border-radius: 8px; font-size: 1em; font-weight: 600; text-align: center; }\n' +
-'        .total-budget { background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%); }\n' +
-'        .checklist-section { background: linear-gradient(135deg, #f8f9ff 0%, #fff5f9 100%); padding: 30px; border-radius: 15px; margin-bottom: 25px; }\n' +
-'        .checklist-title { color: #1e3c72; font-size: 1.4em; margin-bottom: 10px; font-weight: 600; }\n' +
-'        .checklist-subtitle { color: #666; font-size: 0.95em; margin-bottom: 20px; font-style: italic; }\n' +
-'        .checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px; margin-bottom: 10px; background: white; border-radius: 8px; transition: all 0.3s ease; cursor: pointer; }\n' +
-'        .checklist-item:hover { transform: translateX(5px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }\n' +
-'        .checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: #1e3c72; margin-top: 2px; flex-shrink: 0; }\n' +
-'        .checklist-item label { margin: 0; cursor: pointer; flex: 1; line-height: 1.5; }\n' +
-'        .footer { background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%); padding: 40px; border-radius: 15px; text-align: center; color: white; margin-top: 30px; }\n' +
-'        .footer h2 { font-size: 2em; margin-bottom: 15px; font-weight: 300; }\n' +
-'        .cta-btn { background: white; color: #ff6b9d; padding: 15px 40px; border: none; border-radius: 50px; font-size: 1.1em; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }\n' +
-'        @media print { body { background: white; } }\n' +
-'        @media (max-width: 768px) { .header h1 { font-size: 2em; } .planner-card { padding: 25px; } }\n' +
-'    </style>\n' +
-'</head>\n' +
-'<body>\n' +
-'    <div class="container">\n' +
-'        <div class="header">\n' +
-'            <div class="brand-name">FROM INSTAGO ED TRAVEL</div>\n' +
-'            <h1>✈️ My Complete Travel Plan</h1>\n' +
-'        </div>\n' +
-'\n' +
-'        <div class="planner-card">\n' +
-'            <h2 class="section-title"><span>🌍</span> My Trip Details</h2>\n' +
-'            <div class="info-grid">\n' +
-'                <div class="info-item"><div class="info-label">Destination</div><input type="text" id="dest" value="' + destination + '" placeholder="Enter destination"></div>\n' +
-'                <div class="info-item"><div class="info-label">Travel Dates</div><input type="text" id="tdates" value="' + dates + '" placeholder="e.g., Dec 15-22, 2024"></div>\n' +
-'                <div class="info-item"><div class="info-label">Number of Travelers</div><input type="number" id="trav" value="' + travelers + '" min="1" placeholder="1"></div>\n' +
-'                <div class="info-item"><div class="info-label">Travel Style</div><select id="style"><option value="' + travelStyle + '" selected>' + travelStyle + '</option><option value="Luxury & Indulgence">Luxury & Indulgence</option><option value="Adventure & Exploration">Adventure & Exploration</option><option value="Cultural Immersion">Cultural Immersion</option><option value="Rest & Rejuvenation">Rest & Rejuvenation</option><option value="Family Experience">Family Experience</option><option value="Romantic Escape">Romantic Escape</option></select></div>\n' +
-'            </div>\n' +
-'            <div class="info-item" style="margin-top: 20px;"><div class="info-label">Special Requests & Preferences</div><textarea id="prefs">' + preferences + '</textarea></div>\n' +
-'        </div>\n' +
-'\n' +
-'        <div class="planner-card">\n' +
-'            <h2 class="section-title"><span>💰</span> My Budget Plan</h2>\n' +
-'            <div class="budget-section">\n' +
-'                <div class="budget-card"><h3>Flights</h3><div class="amount" id="displayFlight">' + parseFloat(flightBudget).toLocaleString() + '</div><input type="number" id="inputFlight" value="' + flightBudget + '" placeholder="Enter amount"></div>\n' +
-'                <div class="budget-card"><h3>Accommodation</h3><div class="amount" id="displayAccom">' + parseFloat(accomBudget).toLocaleString() + '</div><input type="number" id="inputAccom" value="' + accomBudget + '" placeholder="Enter amount"></div>\n' +
-'                <div class="budget-card"><h3>Visa Fees</h3><div class="amount" id="displayVisa">' + parseFloat(visaBudget).toLocaleString() + '</div><input type="number" id="inputVisa" value="' + visaBudget + '" placeholder="Enter amount"></div>\n' +
-'                <div class="budget-card"><h3>Activities</h3><div class="amount" id="displayAct">' + parseFloat(actBudget).toLocaleString() + '</div><input type="number" id="inputAct" value="' + actBudget + '" placeholder="Enter amount"></div>\n' +
-'            </div>\n' +
-'            <div class="budget-card total-budget"><h3>Total Estimated Budget</h3><div class="amount" id="displayTotal">' + totalBudget + '</div></div>\n' +
-'        </div>\n' +
-'\n' +
-'        <div class="planner-card">\n' +
-'            <h2 class="section-title"><span>✅</span> My Travel Checklist</h2>\n' +
-'            <div class="checklist-section"><h3 class="checklist-title">1. BEFORE YOU BOOK</h3><p class="checklist-subtitle">2-3 months out</p>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c1"><label for="c1">Decide on destination and travel dates</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c2"><label for="c2">Check passport expiration (needs 6+ months validity)</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c3"><label for="c3">Research visa requirements for destination</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c4"><label for="c4">Set travel budget (flights, accommodation, visa fees)</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c5"><label for="c5">Consult with InstaGo about visa process</label></div>\n' +
-'            </div>\n' +
-'            <div class="checklist-section"><h3 class="checklist-title">2. DOCUMENTS YOU\'LL NEED</h3>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c6"><label for="c6">Valid passport</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c7"><label for="c7">Recent passport photos (2x2 inches)</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c8"><label for="c8">Bank statements (last 3-6 months)</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c9"><label for="c9">Employment letter or proof of income</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c10"><label for="c10">Travel itinerary</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c11"><label for="c11">Accommodation booking</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c12"><label for="c12">Travel insurance</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c13"><label for="c13">Return flight ticket</label></div>\n' +
-'            </div>\n' +
-'            <div class="checklist-section"><h3 class="checklist-title">3. VISA APPLICATION</h3><p class="checklist-subtitle">1-2 months before travel</p>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c14"><label for="c14">Complete visa application form</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c15"><label for="c15">Pay visa fees</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c16"><label for="c16">Book visa appointment (if required)</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c17"><label for="c17">Submit all documents</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c18"><label for="c18">Track application status</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c19"><label for="c19">Receive visa approval</label></div>\n' +
-'            </div>\n' +
-'            <div class="checklist-section"><h3 class="checklist-title">4. FINAL PREPARATIONS</h3><p class="checklist-subtitle">2 weeks before travel</p>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c20"><label for="c20">Book flights</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c21"><label for="c21">Book accommodation</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c22"><label for="c22">Notify bank of travel dates</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c23"><label for="c23">Get travel vaccines (if needed)</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c24"><label for="c24">Buy travel insurance</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c25"><label for="c25">Pack essentials</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c26"><label for="c26">Make copies of important documents</label></div>\n' +
-'            </div>\n' +
-'            <div class="checklist-section"><h3 class="checklist-title">5. TRAVEL DAY</h3>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c27"><label for="c27">Passport and visa</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c28"><label for="c28">Flight tickets</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c29"><label for="c29">Accommodation confirmation</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c30"><label for="c30">Travel insurance documents</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c31"><label for="c31">Emergency contacts list</label></div>\n' +
-'                <div class="checklist-item"><input type="checkbox" class="checkbox" id="c32"><label for="c32">InstaGo support number</label></div>\n' +
-'            </div>\n' +
-'        </div>\n' +
-'\n' +
-'        <div class="footer">\n' +
-'            <h2>Need Help With Your Travel Plans?</h2>\n' +
-'            <p>Our travel specialists are here to make your journey seamless</p>\n' +
-'            <a href="https://calendly.com/instagoedtravels-info/30min" class="cta-btn" target="_blank">📅 Book a Free Consultation</a>\n' +
-'            <p style="margin-top: 25px; font-size: 0.95em;">Contact InstaGo Ed Travel - We turn your travel dreams into reality ✈️</p>\n' +
-'        </div>\n' +
-'    </div>\n' +
-'\n' +
-'    <script>\n' +
-'        function updateDownloadedBudget() {\n' +
-'            var flight = parseFloat(document.getElementById(\'inputFlight\').value) || 0;\n' +
-'            var accom = parseFloat(document.getElementById(\'inputAccom\').value) || 0;\n' +
-'            var visa = parseFloat(document.getElementById(\'inputVisa\').value) || 0;\n' +
-'            var act = parseFloat(document.getElementById(\'inputAct\').value) || 0;\n' +
-'            document.getElementById(\'displayFlight\').textContent = flight.toLocaleString();\n' +
-'            document.getElementById(\'displayAccom\').textContent = accom.toLocaleString();\n' +
-'            document.getElementById(\'displayVisa\').textContent = visa.toLocaleString();\n' +
-'            document.getElementById(\'displayAct\').textContent = act.toLocaleString();\n' +
-'            var total = flight + accom + visa + act;\n' +
-'            document.getElementById(\'displayTotal\').textContent = total.toLocaleString();\n' +
-'        }\n' +
-'        document.getElementById(\'inputFlight\').addEventListener(\'input\', updateDownloadedBudget);\n' +
-'        document.getElementById(\'inputAccom\').addEventListener(\'input\', updateDownloadedBudget);\n' +
-'        document.getElementById(\'inputVisa\').addEventListener(\'input\', updateDownloadedBudget);\n' +
-'        document.getElementById(\'inputAct\').addEventListener(\'input\', updateDownloadedBudget);\n' +
-'        updateDownloadedBudget();\n' +
-'    </script>\n' +
-'</body>\n' +
-'</html>';
+            const sym         = getCurrency();
+            const flightVal   = Math.max(0, parseFloat(document.getElementById('flightInput').value) || 0);
+            const accomVal    = Math.max(0, parseFloat(document.getElementById('accomInput').value)  || 0);
+            const visaVal     = Math.max(0, parseFloat(document.getElementById('visaInput').value)   || 0);
+            const actVal      = Math.max(0, parseFloat(document.getElementById('actInput').value)    || 0);
+            const totalVal    = flightVal + accomVal + visaVal + actVal;
 
-            // Create blob and download
-            const blob = new Blob([completePlanner], { type: 'text/html' });
-            const url = window.URL.createObjectURL(blob);
+            // Capture checkbox states
+            const checkStates = [];
+            document.querySelectorAll('.checkbox').forEach(cb => checkStates.push(cb.checked));
+
+            const checkedLabels = [];
+            document.querySelectorAll('.checklist-item').forEach(item => {
+                const cb = item.querySelector('.checkbox');
+                const lbl = item.querySelector('label');
+                if (cb && cb.checked && lbl) checkedLabels.push(lbl.textContent);
+            });
+
+            const styleLabel = {
+                luxury:'Luxury & Indulgence', adventure:'Adventure & Exploration',
+                cultural:'Cultural Immersion', relaxation:'Rest & Rejuvenation',
+                family:'Family Experience', romantic:'Romantic Escape'
+            }[travelStyle] || travelStyle;
+
+            // Build fully interactive downloaded file
+            const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My InstaGo Travel Plan</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Garamond','Georgia',serif;background:linear-gradient(135deg,#1e3c72 0%,#2a5298 50%,#7b4397 100%);min-height:100vh;padding:40px 20px}
+.container{max-width:1200px;margin:0 auto}
+.header{text-align:center;color:white;margin-bottom:50px}
+.brand-name{font-size:1.2em;letter-spacing:4px;opacity:.9;margin-bottom:15px;font-weight:400}
+.header h1{font-size:3em;font-weight:300;letter-spacing:3px;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+.header p{font-size:1.2em;font-style:italic;opacity:.9}
+.planner-card{background:white;border-radius:20px;padding:50px;box-shadow:0 20px 60px rgba(0,0,0,.3);margin-bottom:30px}
+.section-title{color:#1e3c72;font-size:2em;margin-bottom:30px;padding-bottom:15px;border-bottom:3px solid #ff6b9d;display:flex;align-items:center;gap:15px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:25px;margin-bottom:30px}
+.form-group{display:flex;flex-direction:column}
+label{color:#1e3c72;font-weight:600;margin-bottom:8px;font-size:.95em;letter-spacing:.5px}
+input,select,textarea{padding:12px 15px;border:2px solid #e0e0e0;border-radius:8px;font-size:1em;transition:all .3s;font-family:'Georgia',serif}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#1e3c72;box-shadow:0 0 0 3px rgba(30,60,114,.1)}
+textarea{resize:vertical;min-height:100px}
+.info-block{background:#f8f9ff;border:1px solid #dde2f5;border-radius:10px;padding:14px 18px;margin-bottom:12px}
+.info-block .lbl{color:#888;font-size:.82em;font-weight:600;margin-bottom:4px}
+.info-block .val{color:#1e3c72;font-size:1.05em;font-weight:600}
+.budget-header-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px}
+.currency-selector{display:flex;align-items:center;gap:10px}
+.currency-selector label{color:#1e3c72;font-size:.9em;font-weight:600;margin:0}
+.currency-selector select{padding:8px 12px;border:2px solid #1e3c72;border-radius:8px;font-size:.95em;color:#1e3c72;font-weight:600;cursor:pointer;background:white}
+.budget-section{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:20px}
+.budget-card{background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);color:white;padding:20px;border-radius:12px;text-align:center;transition:transform .2s,box-shadow .2s}
+.budget-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(30,60,114,.35)}
+.budget-card h3{font-size:.9em;opacity:.9;margin-bottom:10px;font-weight:400}
+.budget-card .amount{font-size:1.8em;font-weight:300;margin-bottom:14px;min-height:44px;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.budget-card .amount.updated{transform:scale(1.08);color:#a8e6cf}
+.budget-card input[type="number"]{width:100%;padding:10px 12px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.15);color:white;border-radius:8px;font-size:1em;font-family:'Georgia',serif;text-align:center;transition:all .3s}
+.budget-card input[type="number"]::placeholder{color:rgba(255,255,255,.55)}
+.budget-card input[type="number"]:focus{outline:none;border-color:white;background:rgba(255,255,255,.25);box-shadow:0 0 0 3px rgba(255,255,255,.15)}
+.budget-card input[type="number"]::-webkit-inner-spin-button,.budget-card input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.budget-card input[type="number"]{-moz-appearance:textfield}
+.budget-card.total-card{background:linear-gradient(135deg,#ff6b9d 0%,#ff8fab 100%);grid-column:1/-1}
+.budget-card.total-card .amount{font-size:2.4em}
+.budget-breakdown{background:#f8f9ff;border:2px solid #e8eaf6;border-radius:12px;padding:20px 24px;margin-top:20px}
+.budget-breakdown h4{color:#1e3c72;font-size:1em;margin-bottom:14px;font-weight:600}
+.breakdown-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.breakdown-label{width:130px;font-size:.85em;color:#555;flex-shrink:0}
+.breakdown-bar-wrap{flex:1;background:#e0e0e0;border-radius:50px;height:10px;overflow:hidden}
+.breakdown-bar{height:100%;border-radius:50px;transition:width .5s;width:0%}
+.bar-flight{background:linear-gradient(90deg,#1e3c72,#2a5298)}
+.bar-accom{background:linear-gradient(90deg,#7b4397,#a855f7)}
+.bar-visa{background:linear-gradient(90deg,#ff6b9d,#ff8fab)}
+.bar-act{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.breakdown-pct{width:42px;font-size:.82em;color:#1e3c72;font-weight:600;text-align:right;flex-shrink:0}
+.budget-tip{margin-top:16px;padding:12px 16px;background:#fff8e1;border-left:4px solid #f59e0b;border-radius:6px;font-size:.85em;color:#7c5c00;display:none}
+.budget-tip.visible{display:block}
+.checklist-section{background:linear-gradient(135deg,#f8f9ff 0%,#fff5f9 100%);padding:30px;border-radius:15px;margin-bottom:25px}
+.checklist-title{color:#1e3c72;font-size:1.4em;margin-bottom:10px;font-weight:600}
+.checklist-subtitle{color:#666;font-size:.95em;margin-bottom:20px;font-style:italic}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;padding:12px;margin-bottom:10px;background:white;border-radius:8px;transition:all .3s;cursor:pointer}
+.checklist-item:hover{transform:translateX(5px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.checklist-item.checked{background:#f0f7f0;opacity:.75}
+.checklist-item.checked label{text-decoration:line-through;color:#888}
+.checkbox{width:20px;height:20px;cursor:pointer;accent-color:#1e3c72;margin-top:2px;flex-shrink:0}
+.checklist-item label{margin:0;cursor:pointer;flex:1;line-height:1.5}
+.progress-row{display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.progress-label{color:#1e3c72;font-size:.95em;font-weight:600;white-space:nowrap}
+.progress-track{flex:1;min-width:100px;height:10px;background:#e0e0e0;border-radius:50px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#1e3c72,#ff6b9d);border-radius:50px;transition:width .4s;width:0%}
+.progress-pct{color:#ff6b9d;font-weight:700;font-size:1em;min-width:40px;text-align:right}
+.footer{background:linear-gradient(135deg,#ff6b9d 0%,#ff8fab 100%);padding:40px;border-radius:15px;text-align:center;color:white;margin-top:40px}
+.footer h2{font-size:2em;margin-bottom:15px;font-weight:300}
+.footer p{font-size:1.1em;margin-bottom:20px;opacity:.95;line-height:1.6}
+.cta-btn{background:white;color:#ff6b9d;padding:15px 40px;border:none;border-radius:50px;font-size:1.1em;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;transition:all .3s}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,.2)}
+@media(max-width:768px){.header h1{font-size:2em}.planner-card{padding:25px 15px}.budget-card.total-card{grid-column:unset}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand-name">FROM INSTAGO ED TRAVEL</div>
+    <h1>✈️ My Complete Travel Plan</h1>
+    <p>Everything you need to organize your journey</p>
+  </div>
+
+  <!-- TRIP DETAILS -->
+  <div class="planner-card">
+    <h2 class="section-title"><span>🌍</span> Trip Details</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Destination</label><input type="text" id="dl-destination" value="${destination.replace(/"/g,'&quot;')}" placeholder="Where dreams take you..."></div>
+      <div class="form-group"><label>Travel Dates</label><input type="text" id="dl-dates" value="${dates.replace(/"/g,'&quot;')}" placeholder="e.g., Dec 15-22, 2024"></div>
+      <div class="form-group"><label>Number of Travelers</label><input type="number" id="dl-travelers" min="1" value="${travelers}" placeholder="1"></div>
+      <div class="form-group"><label>Travel Style</label>
+        <select id="dl-style">
+          <option value="">Select...</option>
+          <option value="luxury" ${travelStyle==='luxury'?'selected':''}>Luxury &amp; Indulgence</option>
+          <option value="adventure" ${travelStyle==='adventure'?'selected':''}>Adventure &amp; Exploration</option>
+          <option value="cultural" ${travelStyle==='cultural'?'selected':''}>Cultural Immersion</option>
+          <option value="relaxation" ${travelStyle==='relaxation'?'selected':''}>Rest &amp; Rejuvenation</option>
+          <option value="family" ${travelStyle==='family'?'selected':''}>Family Experience</option>
+          <option value="romantic" ${travelStyle==='romantic'?'selected':''}>Romantic Escape</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Special Requests &amp; Preferences</label><textarea id="dl-prefs" placeholder="Dietary requirements, accessibility needs...">${preferences.replace(/</g,'&lt;')}</textarea></div>
+  </div>
+
+  <!-- BUDGET -->
+  <div class="planner-card">
+    <h2 class="section-title"><span>💰</span> Budget Planning</h2>
+    <div class="budget-header-row">
+      <div class="currency-selector">
+        <label for="dl-currency">Currency:</label>
+        <select id="dl-currency" onchange="dlUpdateBudget()">
+          <option value="${sym}" selected>${sym}</option>
+          <option value="$">$ USD</option>
+          <option value="₦">₦ NGN</option>
+          <option value="£">£ GBP</option>
+          <option value="€">€ EUR</option>
+          <option value="C$">C$ CAD</option>
+          <option value="A$">A$ AUD</option>
+        </select>
+      </div>
+    </div>
+    <div class="budget-section">
+      <div class="budget-card">
+        <h3>✈️ Flights</h3>
+        <div class="amount" id="dl-fd"><span class="dl-sym">${sym}</span><span id="dl-fb">${flightVal.toLocaleString()}</span></div>
+        <input type="number" id="dl-fi" value="${flightVal||''}" placeholder="Enter amount" min="0" oninput="dlUpdateBudget()">
+      </div>
+      <div class="budget-card">
+        <h3>🏨 Accommodation</h3>
+        <div class="amount" id="dl-ad"><span class="dl-sym">${sym}</span><span id="dl-ab">${accomVal.toLocaleString()}</span></div>
+        <input type="number" id="dl-ai" value="${accomVal||''}" placeholder="Enter amount" min="0" oninput="dlUpdateBudget()">
+      </div>
+      <div class="budget-card">
+        <h3>🛂 Visa Fees</h3>
+        <div class="amount" id="dl-vd"><span class="dl-sym">${sym}</span><span id="dl-vb">${visaVal.toLocaleString()}</span></div>
+        <input type="number" id="dl-vi" value="${visaVal||''}" placeholder="Enter amount" min="0" oninput="dlUpdateBudget()">
+      </div>
+      <div class="budget-card">
+        <h3>🎯 Activities</h3>
+        <div class="amount" id="dl-acd"><span class="dl-sym">${sym}</span><span id="dl-acb">${actVal.toLocaleString()}</span></div>
+        <input type="number" id="dl-aci" value="${actVal||''}" placeholder="Enter amount" min="0" oninput="dlUpdateBudget()">
+      </div>
+      <div class="budget-card total-card">
+        <h3>💳 Total Estimated Budget</h3>
+        <div class="amount"><span class="dl-sym">${sym}</span><span id="dl-total">${totalVal.toLocaleString()}</span></div>
+      </div>
+    </div>
+    <div class="budget-breakdown" id="dl-breakdown" style="display:${totalVal>0?'block':'none'}">
+      <h4>📊 Budget Breakdown</h4>
+      <div class="breakdown-bar-row"><span class="breakdown-label">✈️ Flights</span><div class="breakdown-bar-wrap"><div class="breakdown-bar bar-flight" id="dl-bf" style="width:${totalVal>0?Math.round(flightVal/totalVal*100):0}%"></div></div><span class="breakdown-pct" id="dl-pf">${totalVal>0?Math.round(flightVal/totalVal*100):0}%</span></div>
+      <div class="breakdown-bar-row"><span class="breakdown-label">🏨 Accommodation</span><div class="breakdown-bar-wrap"><div class="breakdown-bar bar-accom" id="dl-ba" style="width:${totalVal>0?Math.round(accomVal/totalVal*100):0}%"></div></div><span class="breakdown-pct" id="dl-pa">${totalVal>0?Math.round(accomVal/totalVal*100):0}%</span></div>
+      <div class="breakdown-bar-row"><span class="breakdown-label">🛂 Visa Fees</span><div class="breakdown-bar-wrap"><div class="breakdown-bar bar-visa" id="dl-bv" style="width:${totalVal>0?Math.round(visaVal/totalVal*100):0}%"></div></div><span class="breakdown-pct" id="dl-pv">${totalVal>0?Math.round(visaVal/totalVal*100):0}%</span></div>
+      <div class="breakdown-bar-row"><span class="breakdown-label">🎯 Activities</span><div class="breakdown-bar-wrap"><div class="breakdown-bar bar-act" id="dl-bac" style="width:${totalVal>0?Math.round(actVal/totalVal*100):0}%"></div></div><span class="breakdown-pct" id="dl-pac">${totalVal>0?Math.round(actVal/totalVal*100):0}%</span></div>
+      <div class="budget-tip visible" id="dl-tip"></div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="planner-card">
+    <h2 class="section-title"><span>✅</span> Your Travel Planning Checklist</h2>
+    <div class="progress-row">
+      <span class="progress-label">Progress:</span>
+      <div class="progress-track"><div class="progress-fill" id="dl-pfill"></div></div>
+      <span class="progress-pct" id="dl-ppct">0%</span>
+      <span class="progress-label" id="dl-pcount" style="color:#888;font-weight:400">0 / 32</span>
+    </div>
+
+    <div class="checklist-section">
+      <h3 class="checklist-title">1. BEFORE YOU BOOK</h3><p class="checklist-subtitle">2-3 months out</p>
+      ${[
+        'Decide on destination and travel dates',
+        'Check passport expiration (needs 6+ months validity)',
+        'Research visa requirements for destination',
+        'Set travel budget (flights, accommodation, visa fees)',
+        'Consult with InstaGo about visa process'
+      ].map((t,i)=>`<div class="checklist-item${checkStates[i]?' checked':''}" onclick="dlToggle(this)"><input type="checkbox" class="checkbox" id="dc${i+1}"${checkStates[i]?' checked':''}><label for="dc${i+1}">${t}</label></div>`).join('')}
+    </div>
+
+    <div class="checklist-section">
+      <h3 class="checklist-title">2. DOCUMENTS YOU'LL NEED</h3>
+      ${[
+        'Valid passport','Recent passport photos (2x2 inches)','Bank statements (last 3-6 months)',
+        'Employment letter or proof of income','Travel itinerary','Accommodation booking',
+        'Travel insurance','Return flight ticket'
+      ].map((t,i)=>`<div class="checklist-item${checkStates[i+5]?' checked':''}" onclick="dlToggle(this)"><input type="checkbox" class="checkbox" id="dc${i+6}"${checkStates[i+5]?' checked':''}><label for="dc${i+6}">${t}</label></div>`).join('')}
+    </div>
+
+    <div class="checklist-section">
+      <h3 class="checklist-title">3. VISA APPLICATION</h3><p class="checklist-subtitle">1-2 months before travel</p>
+      ${[
+        'Complete visa application form','Pay visa fees','Book visa appointment (if required)',
+        'Submit all documents','Track application status','Receive visa approval'
+      ].map((t,i)=>`<div class="checklist-item${checkStates[i+13]?' checked':''}" onclick="dlToggle(this)"><input type="checkbox" class="checkbox" id="dc${i+14}"${checkStates[i+13]?' checked':''}><label for="dc${i+14}">${t}</label></div>`).join('')}
+    </div>
+
+    <div class="checklist-section">
+      <h3 class="checklist-title">4. FINAL PREPARATIONS</h3><p class="checklist-subtitle">2 weeks before travel</p>
+      ${[
+        'Book flights','Book accommodation','Notify bank of travel dates',
+        'Get travel vaccines (if needed)','Buy travel insurance','Pack essentials',
+        'Make copies of important documents'
+      ].map((t,i)=>`<div class="checklist-item${checkStates[i+19]?' checked':''}" onclick="dlToggle(this)"><input type="checkbox" class="checkbox" id="dc${i+20}"${checkStates[i+19]?' checked':''}><label for="dc${i+20}">${t}</label></div>`).join('')}
+    </div>
+
+    <div class="checklist-section">
+      <h3 class="checklist-title">5. TRAVEL DAY</h3>
+      ${[
+        'Passport and visa','Flight tickets','Accommodation confirmation',
+        'Travel insurance documents','Emergency contacts list','InstaGo support number'
+      ].map((t,i)=>`<div class="checklist-item${checkStates[i+26]?' checked':''}" onclick="dlToggle(this)"><input type="checkbox" class="checkbox" id="dc${i+27}"${checkStates[i+26]?' checked':''}><label for="dc${i+27}">${t}</label></div>`).join('')}
+    </div>
+  </div>
+
+  <div class="footer">
+    <h2>Need Help With Your Travel Plans?</h2>
+    <p>Our travel specialists are here to make your journey seamless</p>
+    <a href="https://calendly.com/instagoedtravels-info/30min" class="cta-btn" target="_blank">📅 Book a Free Consultation</a>
+    <p style="margin-top:25px;font-size:.95em">Contact InstaGo Ed Travel — We turn your travel dreams into reality ✈️</p>
+  </div>
+</div>
+
+<script>
+function dlGetSym(){return document.getElementById('dl-currency').value}
+function dlSetSyms(s){document.querySelectorAll('.dl-sym').forEach(e=>e.textContent=s)}
+function dlAnimate(id){const e=document.getElementById(id);e.classList.add('updated');setTimeout(()=>e.classList.remove('updated'),350)}
+function dlUpdateBudget(){
+  const sym=dlGetSym();dlSetSyms(sym);
+  const f=Math.max(0,parseFloat(document.getElementById('dl-fi').value)||0);
+  const a=Math.max(0,parseFloat(document.getElementById('dl-ai').value)||0);
+  const v=Math.max(0,parseFloat(document.getElementById('dl-vi').value)||0);
+  const ac=Math.max(0,parseFloat(document.getElementById('dl-aci').value)||0);
+  const t=f+a+v+ac;
+  document.getElementById('dl-fb').textContent=f.toLocaleString();
+  document.getElementById('dl-ab').textContent=a.toLocaleString();
+  document.getElementById('dl-vb').textContent=v.toLocaleString();
+  document.getElementById('dl-acb').textContent=ac.toLocaleString();
+  document.getElementById('dl-total').textContent=t.toLocaleString();
+  ['dl-fd','dl-ad','dl-vd','dl-acd'].forEach(id=>dlAnimate(id));
+  const bd=document.getElementById('dl-breakdown');
+  if(t>0){
+    bd.style.display='block';
+    const pf=t>0?Math.round(f/t*100):0,pa=t>0?Math.round(a/t*100):0,pv=t>0?Math.round(v/t*100):0,pac=t>0?Math.round(ac/t*100):0;
+    document.getElementById('dl-bf').style.width=pf+'%';document.getElementById('dl-pf').textContent=pf+'%';
+    document.getElementById('dl-ba').style.width=pa+'%';document.getElementById('dl-pa').textContent=pa+'%';
+    document.getElementById('dl-bv').style.width=pv+'%';document.getElementById('dl-pv').textContent=pv+'%';
+    document.getElementById('dl-bac').style.width=pac+'%';document.getElementById('dl-pac').textContent=pac+'%';
+    const tip=document.getElementById('dl-tip');
+    let msg='';
+    if(f/t>0.5)msg='💡 Tip: Flights are over 50% of your budget. Searching 2-3 months early may help.';
+    else if(a/t>0.4)msg='💡 Tip: Accommodation is a large portion. Comparing options could save you money.';
+    else if(ac/t>0.3)msg='💡 Tip: Activities look well-budgeted! Leave a small buffer for surprises.';
+    else msg='✅ Your budget looks well-balanced. Great planning!';
+    tip.textContent=msg;tip.classList.add('visible');
+  }else{bd.style.display='none'}
+}
+function dlToggle(item){
+  const cb=item.querySelector('.checkbox');cb.checked=!cb.checked;
+  item.classList.toggle('checked',cb.checked);dlUpdateProgress();
+}
+function dlUpdateProgress(){
+  const checked=document.querySelectorAll('.checkbox:checked').length;
+  const pct=Math.round(checked/32*100);
+  document.getElementById('dl-pfill').style.width=pct+'%';
+  document.getElementById('dl-ppct').textContent=pct+'%';
+  document.getElementById('dl-pcount').textContent=checked+' / 32';
+}
+// Init progress on load
+document.addEventListener('DOMContentLoaded',dlUpdateProgress);
+dlUpdateBudget();
+<\/script>
+</body>
+</html>`;
+
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'My-InstaGo-Travel-Plan.html';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
+            URL.revokeObjectURL(url);
         }
 
+        // ─── SAVE ─────────────────────────────────────────────────
         function savePlanner() {
-            const data = {
-                destination: document.getElementById('destination').value,
-                dates: document.getElementById('dates').value,
-                travelers: document.getElementById('travelers').value,
-                travelStyle: document.getElementById('travelStyle').value,
-                preferences: document.getElementById('preferences').value,
-                budget: {
-                    flights: document.getElementById('flightInput').value,
-                    accommodation: document.getElementById('accomInput').value,
-                    visaFees: document.getElementById('visaInput').value,
-                    activities: document.getElementById('actInput').value
-                }
-            };
+            const destination = document.getElementById('destination').value;
+            const checked = document.querySelectorAll('.checkbox:checked').length;
+            const progress = Math.round((checked / TOTAL_CHECKS) * 100);
+            const sym = getCurrency();
+            const total = document.getElementById('totalBudget').textContent;
 
-            const checkboxes = document.querySelectorAll('.checkbox:checked');
-            const progress = Math.round((checkboxes.length / 32) * 100);
-
-            alert('✨ Your travel plan has been saved!\\n\\nProgress: ' + progress + '% complete\\nDestination: ' + (data.destination || 'Not specified') + '\\nBudget: $' + document.getElementById('totalBudget').textContent + '\\n\\nOur travel specialists at InstaGo will review your plan and reach out within 24 hours.');
+            alert('✨ Your travel plan has been saved!\n\nProgress: ' + progress + '% complete (' + checked + ' / ' + TOTAL_CHECKS + ' tasks)\nDestination: ' + (destination || 'Not specified') + '\nBudget: ' + sym + total + '\n\nOur travel specialists at InstaGo will review your plan and reach out within 24 hours.');
         }
     </script>
 </body>
-</html>'''
-
-# Save to file
-with open('/mnt/kimi/output/instago_travel_planner.html', 'w') as f:
-    f.write(html_content)
-
-print("File saved successfully!")
-print("The JavaScript code is now properly contained within <script> tags and won't show on the frontend.")
+</html>
 
