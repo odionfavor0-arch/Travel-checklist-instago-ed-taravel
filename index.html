@@ -556,7 +556,7 @@
             <p>Start preparing with our Free Travel Planning Checklist - everything you need to organize your trip in one simple guide.</p>
             <button class="download-btn" onclick="downloadChecklist()">📥 Download Free Checklist</button>
             <p class="support-text">Need help with any of these steps?</p>
-            <a href="https://calendly.com/instagoedtravels-info/30min" target="_blank" class="consultation-btn">📅 Book a Free Consultation</a>
+            <a href="https://calendly.com/instagoedtravels-info/30min " target="_blank" class="consultation-btn">📅 Book a Free Consultation</a>
         </div>
 
         <button class="save-btn" onclick="savePlanner()">Save My Travel Plan</button>
@@ -598,7 +598,7 @@
             const actBudget = document.getElementById('actInput').value || '0';
             const totalBudget = (parseFloat(flightBudget) + parseFloat(accomBudget) + parseFloat(visaBudget) + parseFloat(actBudget)).toLocaleString();
 
-            // Create complete interactive planner
+            // Create complete interactive planner with embedded JavaScript
             const completePlanner = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -713,27 +713,6 @@
         textarea {
             resize: vertical;
             min-height: 80px;
-        }
-
-        .budget-input {
-            margin-top: 10px;
-            width: calc(100% - 20px);
-            padding: 8px;
-            text-align: center;
-            font-size: 1em;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border-radius: 8px;
-        }
-
-        .budget-input:focus {
-            background: rgba(255,255,255,0.3);
-            border-color: white;
-        }
-
-        .budget-input::placeholder {
-            color: rgba(255,255,255,0.7);
         }
 
         .budget-section {
@@ -945,25 +924,29 @@
             <div class="budget-section">
                 <div class="budget-card">
                     <h3>Flights</h3>
-                    <div class="amount">${parseFloat(flightBudget).toLocaleString()}</div>
+                    <div class="amount" id="displayFlight">${parseFloat(flightBudget).toLocaleString()}</div>
+                    <input type="number" id="inputFlight" value="${flightBudget}" placeholder="Enter amount">
                 </div>
                 <div class="budget-card">
                     <h3>Accommodation</h3>
-                    <div class="amount">${parseFloat(accomBudget).toLocaleString()}</div>
+                    <div class="amount" id="displayAccom">${parseFloat(accomBudget).toLocaleString()}</div>
+                    <input type="number" id="inputAccom" value="${accomBudget}" placeholder="Enter amount">
                 </div>
                 <div class="budget-card">
                     <h3>Visa Fees</h3>
-                    <div class="amount">${parseFloat(visaBudget).toLocaleString()}</div>
+                    <div class="amount" id="displayVisa">${parseFloat(visaBudget).toLocaleString()}</div>
+                    <input type="number" id="inputVisa" value="${visaBudget}" placeholder="Enter amount">
                 </div>
                 <div class="budget-card">
                     <h3>Activities</h3>
-                    <div class="amount">${parseFloat(actBudget).toLocaleString()}</div>
+                    <div class="amount" id="displayAct">${parseFloat(actBudget).toLocaleString()}</div>
+                    <input type="number" id="inputAct" value="${actBudget}" placeholder="Enter amount">
                 </div>
             </div>
 
             <div class="budget-card total-budget">
                 <h3>Total Estimated Budget</h3>
-                <div class="amount">${totalBudget}</div>
+                <div class="amount" id="displayTotal">${totalBudget}</div>
             </div>
         </div>
 
@@ -1132,6 +1115,33 @@
             <p style="margin-top: 25px; font-size: 0.95em;">Contact InstaGo Ed Travel - We turn your travel dreams into reality ✈️</p>
         </div>
     </div>
+
+    <script>
+        // Budget calculation functionality for downloaded file
+        function updateDownloadedBudget() {
+            const flight = parseFloat(document.getElementById('inputFlight').value) || 0;
+            const accom = parseFloat(document.getElementById('inputAccom').value) || 0;
+            const visa = parseFloat(document.getElementById('inputVisa').value) || 0;
+            const act = parseFloat(document.getElementById('inputAct').value) || 0;
+            
+            document.getElementById('displayFlight').textContent = flight.toLocaleString();
+            document.getElementById('displayAccom').textContent = accom.toLocaleString();
+            document.getElementById('displayVisa').textContent = visa.toLocaleString();
+            document.getElementById('displayAct').textContent = act.toLocaleString();
+            
+            const total = flight + accom + visa + act;
+            document.getElementById('displayTotal').textContent = total.toLocaleString();
+        }
+
+        // Add event listeners to budget inputs
+        document.getElementById('inputFlight').addEventListener('input', updateDownloadedBudget);
+        document.getElementById('inputAccom').addEventListener('input', updateDownloadedBudget);
+        document.getElementById('inputVisa').addEventListener('input', updateDownloadedBudget);
+        document.getElementById('inputAct').addEventListener('input', updateDownloadedBudget);
+
+        // Initialize budget display on page load
+        updateDownloadedBudget();
+    </script>
 </body>
 </html>`;
 
