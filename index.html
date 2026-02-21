@@ -585,68 +585,148 @@
         document.getElementById('actInput').addEventListener('input', updateBudget);
 
         function downloadChecklist() {
-            // Create a text version of the checklist
-            let checklistText = `INSTAGO ED TRAVEL - COMPLETE TRAVEL PLANNING CHECKLIST
+            // Create HTML checklist document
+            const checklistHTML = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>InstaGo Travel Planning Checklist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #ff6b9d 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+        }
+        h1 {
+            color: #1e3c72;
+            text-align: center;
+            border-bottom: 3px solid #ff6b9d;
+            padding-bottom: 20px;
+        }
+        .brand {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #1e3c72;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .subtitle {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        .checklist-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #1e3c72;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ff6b9d;
+            text-align: center;
+        }
+        .cta {
+            background: #1e3c72;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        @media print {
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="brand">FROM INSTAGO ED TRAVEL</div>
+        <h1>✈️ Your Complete Travel Planning Checklist</h1>
+        
+        <h2>1. BEFORE YOU BOOK</h2>
+        <div class="subtitle">2-3 months out</div>
+        <div class="checklist-item"><span class="checkbox"></span> Decide on destination and travel dates</div>
+        <div class="checklist-item"><span class="checkbox"></span> Check passport expiration (needs 6+ months validity)</div>
+        <div class="checklist-item"><span class="checkbox"></span> Research visa requirements for destination</div>
+        <div class="checklist-item"><span class="checkbox"></span> Set travel budget (flights, accommodation, visa fees)</div>
+        <div class="checklist-item"><span class="checkbox"></span> Consult with InstaGo about visa process</div>
+        
+        <h2>2. DOCUMENTS YOU'LL NEED</h2>
+        <div class="checklist-item"><span class="checkbox"></span> Valid passport</div>
+        <div class="checklist-item"><span class="checkbox"></span> Recent passport photos (2x2 inches)</div>
+        <div class="checklist-item"><span class="checkbox"></span> Bank statements (last 3-6 months)</div>
+        <div class="checklist-item"><span class="checkbox"></span> Employment letter or proof of income</div>
+        <div class="checklist-item"><span class="checkbox"></span> Travel itinerary</div>
+        <div class="checklist-item"><span class="checkbox"></span> Accommodation booking</div>
+        <div class="checklist-item"><span class="checkbox"></span> Travel insurance</div>
+        <div class="checklist-item"><span class="checkbox"></span> Return flight ticket</div>
+        
+        <h2>3. VISA APPLICATION</h2>
+        <div class="subtitle">1-2 months before travel</div>
+        <div class="checklist-item"><span class="checkbox"></span> Complete visa application form</div>
+        <div class="checklist-item"><span class="checkbox"></span> Pay visa fees</div>
+        <div class="checklist-item"><span class="checkbox"></span> Book visa appointment (if required)</div>
+        <div class="checklist-item"><span class="checkbox"></span> Submit all documents</div>
+        <div class="checklist-item"><span class="checkbox"></span> Track application status</div>
+        <div class="checklist-item"><span class="checkbox"></span> Receive visa approval</div>
+        
+        <h2>4. FINAL PREPARATIONS</h2>
+        <div class="subtitle">2 weeks before travel</div>
+        <div class="checklist-item"><span class="checkbox"></span> Book flights</div>
+        <div class="checklist-item"><span class="checkbox"></span> Book accommodation</div>
+        <div class="checklist-item"><span class="checkbox"></span> Notify bank of travel dates</div>
+        <div class="checklist-item"><span class="checkbox"></span> Get travel vaccines (if needed)</div>
+        <div class="checklist-item"><span class="checkbox"></span> Buy travel insurance</div>
+        <div class="checklist-item"><span class="checkbox"></span> Pack essentials</div>
+        <div class="checklist-item"><span class="checkbox"></span> Make copies of important documents</div>
+        
+        <h2>5. TRAVEL DAY</h2>
+        <div class="checklist-item"><span class="checkbox"></span> Passport and visa</div>
+        <div class="checklist-item"><span class="checkbox"></span> Flight tickets</div>
+        <div class="checklist-item"><span class="checkbox"></span> Accommodation confirmation</div>
+        <div class="checklist-item"><span class="checkbox"></span> Travel insurance documents</div>
+        <div class="checklist-item"><span class="checkbox"></span> Emergency contacts list</div>
+        <div class="checklist-item"><span class="checkbox"></span> InstaGo support number</div>
+        
+        <div class="footer">
+            <h3>Need help with any of these steps?</h3>
+            <a href="https://calendly.com/instagoedtravels-info/30min" class="cta">📅 Book a Free Consultation</a>
+            <p style="margin-top: 20px;">Contact InstaGo Ed Travel for all your travel needs!</p>
+        </div>
+    </div>
+</body>
+</html>`;
 
-1. BEFORE YOU BOOK (2-3 months out)
-☐ Decide on destination and travel dates
-☐ Check passport expiration (needs 6+ months validity)
-☐ Research visa requirements for destination
-☐ Set travel budget (flights, accommodation, visa fees)
-☐ Consult with InstaGo about visa process
-
-2. DOCUMENTS YOU'LL NEED
-☐ Valid passport
-☐ Recent passport photos (2x2 inches)
-☐ Bank statements (last 3-6 months)
-☐ Employment letter or proof of income
-☐ Travel itinerary
-☐ Accommodation booking
-☐ Travel insurance
-☐ Return flight ticket
-
-3. VISA APPLICATION (1-2 months before travel)
-☐ Complete visa application form
-☐ Pay visa fees
-☐ Book visa appointment (if required)
-☐ Submit all documents
-☐ Track application status
-☐ Receive visa approval
-
-4. FINAL PREPARATIONS (2 weeks before travel)
-☐ Book flights
-☐ Book accommodation
-☐ Notify bank of travel dates
-☐ Get travel vaccines (if needed)
-☐ Buy travel insurance
-☐ Pack essentials
-☐ Make copies of important documents
-
-5. TRAVEL DAY
-☐ Passport and visa
-☐ Flight tickets
-☐ Accommodation confirmation
-☐ Travel insurance documents
-☐ Emergency contacts list
-☐ InstaGo support number
-
-Need help with any of these steps?
-Book a free consultation: https://calendly.com/instagoedtravels-info/30min
-
-Contact InstaGo Ed Travel for all your travel needs!`;
-
-            // Create a blob and download
-            const blob = new Blob([checklistText], { type: 'text/plain' });
+            // Create blob and download as HTML file
+            const blob = new Blob([checklistHTML], { type: 'text/html' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'InstaGo-Travel-Planning-Checklist.txt';
+            a.download = 'InstaGo-Travel-Checklist.html';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
-            
-            alert('✨ Your checklist has been downloaded!\n\nCheck your Downloads folder for "InstaGo-Travel-Planning-Checklist.txt"');
         }
 
         function savePlanner() {
